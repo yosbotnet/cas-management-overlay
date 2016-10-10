@@ -1,5 +1,5 @@
 CAS Services Management Overlay
-============================
+=============================
 
 Services management web application Maven overlay for CAS with externalized configuration.
 
@@ -13,6 +13,7 @@ Services management web application Maven overlay for CAS with externalized conf
 * JDK 1.7+
 
 # Externalized Configuration
+
 The `etc` directory contains the sample configuration files that would need to
 be copied to an external file system location (`/etc/cas` by default)
 and configured to satisfy local CAS installation needs. Current files are:
@@ -23,6 +24,11 @@ and configured to satisfy local CAS installation needs. Current files are:
 
 Note that the `log4j2.xml` config file is shared with cas web context and that
 file should be present already in `/etc/cas` directory.
+
+
+```bash
+sudo cp -r * etc/ /etc/cas/
+```
 
 # Build
 
@@ -42,18 +48,10 @@ mvnw.bat clean package
 
 * Create a Java keystore at `/etc/cas/jetty/thekeystore` with the password `changeit`.
 * Import your server certificate inside this keystore.
+
 ```bash
 # create a self signed keystore using keytool
-keytool -keystore keystore -alias jetty -genkey -keyalg RSA
-sudo mv keystore /etc/cas/jetty/thekeystore
-```
-
-## Externalized Configuration
-The `etc` directory contains the sample configuration files that would need to be copied to an external file system location (`/etc/cas` by default)
-and configured to satisfy local CAS installation needs.
-
-```bash
-sudo cp -r * etc/ /etc/cas/
+keytool -keystore /etc/cas/jetty/thekeystore -alias jetty -genkey -keyalg RSA
 ```
 
 Start the server
@@ -67,9 +65,11 @@ Webapp will be available at:
 * `https://localhost:8443/cas-services`
 
 ## External
+
 Deploy resultant `target/cas-services.war` to a Servlet container of choice.
 
 # Use
+
 Access the server on `https://localhost:8443/cas-services`
 and start adding services definitions. Also note that the CAS server services
 registry MUST be JSON and pointing to the same external config
