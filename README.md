@@ -42,7 +42,21 @@ mvnw.bat clean package
 
 * Create a Java keystore at `/etc/cas/jetty/thekeystore` with the password `changeit`.
 * Import your server certificate inside this keystore.
+```bash
+# create a self signed keystore using keytool
+keytool -keystore keystore -alias jetty -genkey -keyalg RSA
+sudo mv keystore /etc/cas/jetty/thekeystore
+```
 
+## Externalized Configuration
+The `etc` directory contains the sample configuration files that would need to be copied to an external file system location (`/etc/cas` by default)
+and configured to satisfy local CAS installation needs.
+
+```bash
+sudo cp -r * etc/ /etc/cas/
+```
+
+Start the server
 ```bash
 mvnw jetty:run-forked
 ```
