@@ -50,7 +50,7 @@ mvnw.bat clean package
 * Import your server certificate inside this keystore.
 
 ```bash
-# create a self signed keystore using keytool
+# create a self signed keystore using keytool - Use only for demos and testing!
 keytool -keystore /etc/cas/jetty/thekeystore -alias jetty -genkey -keyalg RSA
 ```
 
