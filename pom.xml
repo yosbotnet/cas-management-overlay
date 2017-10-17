@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd ">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apereo.cas</groupId>
-    <artifactId>cas-overlay</artifactId>
+    <artifactId>cas-services-management-overlay</artifactId>
     <packaging>war</packaging>
     <version>1.0</version>
 
@@ -20,6 +20,24 @@
                 </configuration>
             </plugin>
             <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${springboot.version}</version>
+                <configuration>
+                    <mainClass>${mainClassName}</mainClass>
+                    <addResources>true</addResources>
+                    <executable>${isExecutable}</executable>
+                    <layout>WAR</layout>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.6</version>
@@ -29,7 +47,7 @@
                     <recompressZippedFiles>false</recompressZippedFiles>
                     <archive>
                         <compress>false</compress>
-                        <manifestFile>${project.build.directory}/war/work/org.apereo.cas/cas-management-webapp/META-INF/MANIFEST.MF</manifestFile> 
+                        <manifestFile>${manifestFileToUse}</manifestFile>
                     </archive>
                     <overlays>
                         <overlay>
@@ -54,12 +72,16 @@
             <artifactId>cas-management-webapp</artifactId>
             <version>${cas.version}</version>
             <type>war</type>
-            <scope>runtime</scope>
         </dependency>
     </dependencies>
 
     <properties>
-        <cas.version>5.2.0-RC2</cas.version>
+        <cas.version>5.2.0-SNAPSHOT</cas.version>
+        <springboot.version>1.5.7.RELEASE</springboot.version>
+        <mainClassName>org.springframework.boot.loader.WarLauncher</mainClassName>
+        <isExecutable>false</isExecutable>
+        <manifestFileToUse>${project.build.directory}/war/work/org.apereo.cas/cas-management-webapp/META-INF/MANIFEST.MF</manifestFileToUse>
+
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -90,16 +112,45 @@
             <id>shibboleth-releases</id>
             <url>https://build.shibboleth.net/nexus/content/repositories/releases</url>
         </repository>
-        <repository>
-            <id>spring-milestones</id>
-            <url>https://repo.spring.io/milestone</url>
-        </repository>
     </repositories>
 
     <profiles>
         <profile>
             <activation>
                 <activeByDefault>true</activeByDefault>
+            </activation>
+            <id>exec</id>
+            <properties>
+                <mainClassName>org.apereo.cas.mgmt.web.CasManagementWebApplication</mainClassName>
+                <isExecutable>true</isExecutable>
+                <manifestFileToUse></manifestFileToUse>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.soebes.maven.plugins</groupId>
+                        <artifactId>echo-maven-plugin</artifactId>
+                        <version>0.3.0</version>
+                        <executions>
+                            <execution>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>echo</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <echos>
+                            <echo>Executable profile to make the generated CAS management application executable.</echo></echos>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <activation>
+                <activeByDefault>false</activeByDefault>
             </activation>
             <id>pgp</id>
             <build>
