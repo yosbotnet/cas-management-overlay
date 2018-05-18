@@ -6,7 +6,7 @@ Services management web application Maven overlay for CAS with externalized conf
 # Versions
 
 ```xml
-<cas.version>5.2.x</cas.version>
+<cas.version>5.3.x</cas.version>
 ```
 
 # Requirements
@@ -34,6 +34,7 @@ To update `SNAPSHOT` versions run:
 ```
 
 ## Windows Build
+
 On Windows you can run build.cmd instead of build.sh. The usage may differ from build.sh, run "build.cmd help" for usage.
 
 ## Note
