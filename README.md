@@ -1,7 +1,7 @@
-CAS Services Management Overlay
+CAS Management Overlay
 ============================
 
-Services management web application Maven overlay for CAS with externalized configuration. The Gradle equivalent of this overlay is [available here](https://github.com/apereo/cas-services-management-gradle-overlay).
+CAS management web application Maven overlay for CAS with externalized configuration. The Gradle equivalent of this overlay is [available here](https://github.com/apereo/cas-management-gradle-overlay).
 
 # Versions
 
