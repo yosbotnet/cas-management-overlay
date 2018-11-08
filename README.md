@@ -1,17 +1,17 @@
 CAS Management Overlay
 ============================
 
-CAS management web application Maven overlay for CAS with externalized configuration. The Gradle equivalent of this overlay is [available here](https://github.com/apereo/cas-management-gradle-overlay).
+CAS management web application WAR overlay for CAS with externalized configuration.
 
 # Versions
 
 ```xml
-<cas.version>5.3.x</cas.version>
+<cas.version>6.0.x</cas.version>
 ```
 
 # Requirements
 
-* JDK 1.8+
+* JDK 11
 
 # Build
 
@@ -41,7 +41,6 @@ On Windows you can run build.cmd instead of build.sh. The usage may differ from 
 
 If you are running the management web application on the same machine as the CAS server web application itself, 
 you will need to evaluate the build script and make sure the configuration files don't override each other.
-
 
 # Deployment
 
