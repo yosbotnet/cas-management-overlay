@@ -3,9 +3,12 @@ buildscript {
         mavenLocal()
         jcenter()
         maven { url "https://repo.spring.io/libs-milestone" }
+        maven { url "https://repo.spring.io/libs-snapshot" }
+        maven { url "https://plugins.gradle.org/m2/" }        
     }
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${project.springBootVersion}"
+        classpath "io.freefair.gradle:maven-plugin:${project.gradleMavenPluginVersion}"
     }
 }
 
@@ -19,12 +22,15 @@ repositories {
     maven { url "https://oss.jfrog.org/artifactory/oss-snapshot-local" }
 }
 
-apply from: "https://dl.bintray.com/scalding/generic/waroverlay.gradle"
-
+apply plugin: "io.freefair.war-overlay"
 apply plugin: "war"
 apply plugin: "org.springframework.boot"
 apply plugin: "eclipse"
 apply plugin: "idea"
+
+def casMgmtServerVersion = project.'casmgmt.version'
+
+project.ext."casMgmtServerVersion" = casMgmtServerVersion
 
 eclipse {
     classpath {
@@ -41,7 +47,6 @@ idea {
 }
 
 war {
-    includeWarJars = true
     entryCompression = ZipEntryCompression.STORED
 }
 
@@ -71,11 +76,8 @@ wrapper {
 }
 
 dependencies {
-    if (project.hasProperty("external")) {
-        compile "org.apereo.cas:cas-mgmt-webapp:${project.'casmgmt.version'}"
-    } else {
-        compile "org.apereo.cas:cas-mgmt-webapp${project.appServer}:${project.'casmgmt.version'}"
-    }
+    // Other CAS Management dependencies/modules may be listed here...
+
 }
 
 task run(group: "build", description: "Run the CAS managment web application in embedded container mode") {
@@ -88,5 +90,28 @@ task run(group: "build", description: "Run the CAS managment web application in 
             args = ["build/libs/cas-management.war"]
             logger.info "Started ${commandLine}"
         }
+    }
+}
+
+bootWar {
+    entryCompression = ZipEntryCompression.STORED
+    overlays {
+        // https://docs.freefair.io/gradle-plugins/current/reference/#_io_freefair_war_overlay
+        // Note: The "excludes" property is only for files in the war dependency.
+        // If a jar is excluded from the war, it could be brought back into the final war as a dependency
+        // of non-war dependencies. Those should be excluded via normal gradle dependency exclusions.
+        cas {
+            from "org.apereo.cas:cas-mgmt-webapp${project.appServer}:${casMgmtServerVersion}@war"
+            provided = false
+            excludes = []
+        }
+    }    
+}
+
+task copyCasConfiguration(type: Copy, group: "build", description: "Copy the CAS configuration from this project to /etc/cas/config") {
+    from "etc/cas/config"
+    into new File('/etc/cas/config').absolutePath
+    doFirst {
+        new File('/etc/cas/config').mkdirs()
     }
 }
