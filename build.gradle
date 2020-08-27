@@ -4,7 +4,7 @@ buildscript {
         jcenter()
         maven { url "https://repo.spring.io/libs-milestone" }
         maven { url "https://repo.spring.io/libs-snapshot" }
-        maven { url "https://plugins.gradle.org/m2/" }        
+        maven { url "https://plugins.gradle.org/m2/" }         
     }
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${project.springBootVersion}"
@@ -68,11 +68,6 @@ bootWar {
 bootRun {
     sourceResources sourceSets.main
     classpath = sourceSets.main.runtimeClasspath
-}
-
-wrapper {
-    distributionType = Wrapper.DistributionType.BIN
-    gradleVersion = "${project.gradleVersion}"
 }
 
 dependencies {
