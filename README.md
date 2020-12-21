@@ -54,3 +54,13 @@ CAS will be available at:
 ## External
 
 Deploy resultant `target/cas-management.war`  to a servlet container of choice.
+
+### Dockerfile
+
+You can also use the native Docker tooling and the provided `Dockerfile` to build and run CAS Management.
+
+```bash
+chmod +x *.sh
+./docker-build.sh
+./docker-run.sh
+```
