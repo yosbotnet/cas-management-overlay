@@ -6,7 +6,7 @@ CAS management web application WAR overlay for CAS with externalized configurati
 # Versions
 
 ```xml
-<cas.version>6.2.x</cas.version>
+<cas.version>6.3.x</cas.version>
 ```
 
 # Requirements

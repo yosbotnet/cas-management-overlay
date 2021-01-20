@@ -1,10 +1,8 @@
 buildscript {
     repositories {
         mavenLocal()
-        jcenter()
-        maven { url "https://repo.spring.io/libs-milestone" }
-        maven { url "https://repo.spring.io/libs-snapshot" }
-        maven { url "https://plugins.gradle.org/m2/" }         
+        jcenter()  
+        gradlePluginPortal()     
     }
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${project.springBootVersion}"
@@ -15,11 +13,9 @@ buildscript {
 repositories {
     mavenLocal()
     mavenCentral()
-    jcenter()
+    maven { url 'https://oss.sonatype.org/content/repositories/releases' }
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
     maven { url 'https://build.shibboleth.net/nexus/content/repositories/releases/' }
-    maven { url "https://repo.spring.io/milestone/" }
-    maven { url "https://oss.jfrog.org/artifactory/oss-snapshot-local" }
 }
 
 apply plugin: "io.freefair.war-overlay"
@@ -43,6 +39,14 @@ idea {
     module {
         downloadJavadoc = true
         downloadSources = true
+    }
+}
+
+configurations.all {
+    resolutionStrategy {
+        cacheChangingModulesFor 0, "seconds"
+        cacheDynamicVersionsFor 0, "seconds"
+        preferProjectModules()
     }
 }
 
